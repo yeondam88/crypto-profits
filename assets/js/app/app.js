@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
+import Home from "./home";
+
 class Layout extends Component {
   constructor() {
     super();
@@ -14,8 +16,14 @@ class Layout extends Component {
   render() {
     return (
       <div className="home">
-        <div className="col-md-offset-4 col-md-6">
-          <div className="box1" />
+        <div className="container">
+          <header>
+            <div className="logo">Crypto Profits</div>
+            <nav className="menu">
+              <a href="#">Register</a>
+            </nav>
+          </header>
+          <Home />
         </div>
       </div>
     );
