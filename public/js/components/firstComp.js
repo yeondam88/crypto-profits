@@ -45,7 +45,15 @@ var Layout = function (_Component) {
   _createClass(Layout, [{
     key: "render",
     value: function render() {
-      return _react2.default.createElement("div", { className: "home" });
+      return _react2.default.createElement(
+        "div",
+        { className: "home" },
+        _react2.default.createElement(
+          "div",
+          { className: "col-md-offset-4 col-md-6" },
+          _react2.default.createElement("div", { className: "box1" })
+        )
+      );
     }
   }]);
 

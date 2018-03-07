@@ -12,7 +12,13 @@ class Layout extends Component {
     console.log("swag");
   };
   render() {
-    return <div className="home" />;
+    return (
+      <div className="home">
+        <div className="col-md-offset-4 col-md-6">
+          <div className="box1" />
+        </div>
+      </div>
+    );
   }
 }
 
