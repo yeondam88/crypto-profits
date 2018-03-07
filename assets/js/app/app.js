@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
-import Home from "./home";
+import Home from "./Home";
+import Results from "./Results";
 
 class Layout extends Component {
   constructor() {
@@ -20,10 +21,13 @@ class Layout extends Component {
           <header>
             <div className="logo">Crypto Profits</div>
             <nav className="menu">
-              <a href="#">Register</a>
+              <a href="#" className="main-btn">
+                Register
+              </a>
             </nav>
           </header>
-          <Home />
+          {/*<Home /> */}
+          <Results />
         </div>
       </div>
     );
