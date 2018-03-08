@@ -8,12 +8,24 @@ class Layout extends Component {
   constructor() {
     super();
     this.state = {
-      name: "Joe"
+      location: "Home"
     };
+    this.routingSystem = this.routingSystem.bind(this);
   }
-  clickedBtn = () => {
-    console.log("swag");
-  };
+
+  routingSystem() {
+    switch (this.state.location) {
+      case "Home":
+        return "<Home />";
+        break;
+      case "Results":
+        return "<Results />";
+        break;
+      default:
+        return "<Home />";
+    }
+  }
+
   render() {
     return (
       <div className="home">

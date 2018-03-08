@@ -40,17 +40,28 @@ var Layout = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
 
-    _this.clickedBtn = function () {
-      console.log("swag");
-    };
-
     _this.state = {
-      name: "Joe"
+      location: "Home"
     };
+    _this.routingSystem = _this.routingSystem.bind(_this);
     return _this;
   }
 
   _createClass(Layout, [{
+    key: "routingSystem",
+    value: function routingSystem() {
+      switch (this.state.location) {
+        case "Home":
+          return "<Home />";
+          break;
+        case "Results":
+          return "<Results />";
+          break;
+        default:
+          return "<Home />";
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       return _react2.default.createElement(
