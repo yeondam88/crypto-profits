@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 220:
+/***/ 228:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12,11 +12,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(11);
+var _react = __webpack_require__(12);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDatepicker = __webpack_require__(254);
+var _reactDatepicker = __webpack_require__(280);
 
 var _reactDatepicker2 = _interopRequireDefault(_reactDatepicker);
 
@@ -105,7 +105,7 @@ exports.default = Home;
 
 /***/ }),
 
-/***/ 221:
+/***/ 229:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117,7 +117,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(11);
+var _react = __webpack_require__(12);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -202,7 +202,7 @@ exports.default = Results;
 
 /***/ }),
 
-/***/ 223:
+/***/ 248:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -210,23 +210,27 @@ exports.default = Results;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(11);
+var _react = __webpack_require__(12);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(27);
+var _reactDom = __webpack_require__(28);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _axios = __webpack_require__(227);
+
+var _axios2 = _interopRequireDefault(_axios);
 
 var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _Home = __webpack_require__(220);
+var _Home = __webpack_require__(228);
 
 var _Home2 = _interopRequireDefault(_Home);
 
-var _Results = __webpack_require__(221);
+var _Results = __webpack_require__(229);
 
 var _Results2 = _interopRequireDefault(_Results);
 
@@ -248,14 +252,21 @@ var Layout = function (_Component) {
 
     _this.state = {
       location: "home",
-      date: (0, _moment2.default)()
+      date: (0, _moment2.default)(),
+      data: null
     };
     _this.routingSystem = _this.routingSystem.bind(_this);
     _this.handleDateChange = _this.handleDateChange.bind(_this);
+    _this.apiCall = _this.apiCall.bind(_this);
     return _this;
   }
 
   _createClass(Layout, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.apiCall();
+    }
+  }, {
     key: "routingSystem",
     value: function routingSystem() {
       switch (this.state.location) {
@@ -280,7 +291,20 @@ var Layout = function (_Component) {
       this.setState({
         date: date
       }, function () {
-        return console.log(_this2.state);
+        return console.log(_this2.state.data.unix());
+      });
+    }
+  }, {
+    key: "apiCall",
+    value: function apiCall() {
+      var _this3 = this;
+
+      _axios2.default.get("https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD&ts=1452680400").then(function (response) {
+        return _this3.setState({
+          data: response.data
+        });
+      }).catch(function (error) {
+        return console.log(error);
       });
     }
   }, {
@@ -325,4 +349,4 @@ _reactDom2.default.render(_react2.default.createElement(Layout, null), app);
 
 /***/ })
 
-},[223]);
+},[248]);

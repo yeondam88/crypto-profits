@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-
+import axios from "axios";
 import moment from "moment";
 import Home from "./Home";
 import Results from "./Results";
@@ -10,10 +10,16 @@ class Layout extends Component {
     super();
     this.state = {
       location: "home",
-      date: moment()
+      date: moment(),
+      data: null
     };
     this.routingSystem = this.routingSystem.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.apiCall = this.apiCall.bind(this);
+  }
+
+  componentDidMount() {
+    this.apiCall();
   }
 
   routingSystem() {
@@ -39,8 +45,21 @@ class Layout extends Component {
       {
         date: date
       },
-      () => console.log(this.state)
+      () => console.log(this.state.data.unix())
     );
+  }
+
+  apiCall() {
+    axios
+      .get(
+        "https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD&ts=1452680400"
+      )
+      .then(response =>
+        this.setState({
+          data: response.data
+        })
+      )
+      .catch(error => console.log(error));
   }
 
   render() {
