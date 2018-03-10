@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 221:
+/***/ 220:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16,7 +16,7 @@ var _react = __webpack_require__(11);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDatepicker = __webpack_require__(57);
+var _reactDatepicker = __webpack_require__(254);
 
 var _reactDatepicker2 = _interopRequireDefault(_reactDatepicker);
 
@@ -83,9 +83,8 @@ var Home = function (_Component) {
               null,
               "Date"
             ),
-            _react2.default.createElement("input", { type: "text", name: "date" }),
             _react2.default.createElement(_reactDatepicker2.default, {
-              seleted: this.props.globalState.date,
+              selected: this.props.globalState.date,
               onChange: this.props.handleDateChange
             }),
             _react2.default.createElement(
@@ -106,7 +105,7 @@ exports.default = Home;
 
 /***/ }),
 
-/***/ 222:
+/***/ 221:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -203,7 +202,7 @@ exports.default = Results;
 
 /***/ }),
 
-/***/ 224:
+/***/ 223:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -219,21 +218,17 @@ var _reactDom = __webpack_require__(27);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Home = __webpack_require__(221);
-
-var _Home2 = _interopRequireDefault(_Home);
-
-var _Results = __webpack_require__(222);
-
-var _Results2 = _interopRequireDefault(_Results);
-
-var _reactDatepicker = __webpack_require__(57);
-
-var _reactDatepicker2 = _interopRequireDefault(_reactDatepicker);
-
 var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
+
+var _Home = __webpack_require__(220);
+
+var _Home2 = _interopRequireDefault(_Home);
+
+var _Results = __webpack_require__(221);
+
+var _Results2 = _interopRequireDefault(_Results);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -252,8 +247,8 @@ var Layout = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
 
     _this.state = {
-      location: "Home",
-      date: ""
+      location: "home",
+      date: (0, _moment2.default)()
     };
     _this.routingSystem = _this.routingSystem.bind(_this);
     _this.handleDateChange = _this.handleDateChange.bind(_this);
@@ -264,7 +259,7 @@ var Layout = function (_Component) {
     key: "routingSystem",
     value: function routingSystem() {
       switch (this.state.location) {
-        case "Home":
+        case "home":
           return _react2.default.createElement(_Home2.default, {
             handleDateChange: this.handleDateChange,
             globalState: this.state
@@ -280,8 +275,12 @@ var Layout = function (_Component) {
   }, {
     key: "handleDateChange",
     value: function handleDateChange(date) {
+      var _this2 = this;
+
       this.setState({
         date: date
+      }, function () {
+        return console.log(_this2.state);
       });
     }
   }, {
@@ -311,7 +310,7 @@ var Layout = function (_Component) {
               )
             )
           ),
-          _react2.default.createElement(_Home2.default, null)
+          this.routingSystem()
         )
       );
     }
@@ -326,4 +325,4 @@ _reactDom2.default.render(_react2.default.createElement(Layout, null), app);
 
 /***/ })
 
-},[224]);
+},[223]);

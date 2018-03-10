@@ -27,9 +27,8 @@ class Home extends Component {
             <label>Crypto Amount</label>
             <input type="text" name="amount" />
             <label>Date</label>
-            <input type="text" name="date" />
             <DatePicker
-              seleted={this.props.globalState.date}
+              selected={this.props.globalState.date}
               onChange={this.props.handleDateChange}
             />
             <button type="submit" className="home--button">
