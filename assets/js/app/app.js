@@ -4,26 +4,42 @@ import ReactDOM from "react-dom";
 import Home from "./Home";
 import Results from "./Results";
 
+import DatePicker from "react-datepicker";
+import moment from "moment";
+
 class Layout extends Component {
   constructor() {
     super();
     this.state = {
-      location: "Home"
+      location: "Home",
+      date: ""
     };
     this.routingSystem = this.routingSystem.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   routingSystem() {
     switch (this.state.location) {
       case "Home":
-        return "<Home />";
+        return (
+          <Home
+            handleDateChange={this.handleDateChange}
+            globalState={this.state}
+          />
+        );
         break;
       case "Results":
-        return "<Results />";
+        return <Results />;
         break;
       default:
-        return "<Home />";
+        return <Home />;
     }
+  }
+
+  handleDateChange(date) {
+    this.setState({
+      date: date
+    });
   }
 
   render() {
@@ -38,8 +54,8 @@ class Layout extends Component {
               </a>
             </nav>
           </header>
-          {/*<Home /> */}
-          <Results />
+          <Home />
+          {/*<Results />*/}
         </div>
       </div>
     );

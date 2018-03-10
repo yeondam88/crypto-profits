@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 class Home extends Component {
   constructor() {
@@ -7,9 +9,7 @@ class Home extends Component {
       name: "Joe"
     };
   }
-  clickedBtn = () => {
-    console.log("swag");
-  };
+
   render() {
     return (
       <section id="home">
@@ -28,7 +28,13 @@ class Home extends Component {
             <input type="text" name="amount" />
             <label>Date</label>
             <input type="text" name="date" />
-            <button type="submit">Check Profits</button>
+            <DatePicker
+              seleted={this.props.globalState.date}
+              onChange={this.props.handleDateChange}
+            />
+            <button type="submit" className="home--button">
+              Check Profits
+            </button>
           </div>
         </div>
       </section>
