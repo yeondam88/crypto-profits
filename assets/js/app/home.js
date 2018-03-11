@@ -25,13 +25,22 @@ class Home extends Component {
             <h2>Enter Transaction</h2>
 
             <label>Crypto Amount</label>
-            <input type="text" name="amount" />
+            <input
+              type="text"
+              name="amount"
+              onChange={this.props.onChangeInput}
+              value={this.props.globalState.cryptoAmount}
+            />
             <label>Date</label>
             <DatePicker
               selected={this.props.globalState.date}
               onChange={this.props.handleDateChange}
             />
-            <button type="submit" className="home--button">
+            <button
+              type="submit"
+              className="home--button"
+              onClick={this.props.checkProfits}
+            >
               Check Profits
             </button>
           </div>

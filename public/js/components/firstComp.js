@@ -77,7 +77,12 @@ var Home = function (_Component) {
               null,
               "Crypto Amount"
             ),
-            _react2.default.createElement("input", { type: "text", name: "amount" }),
+            _react2.default.createElement("input", {
+              type: "text",
+              name: "amount",
+              onChange: this.props.onChangeInput,
+              value: this.props.globalState.cryptoAmount
+            }),
             _react2.default.createElement(
               "label",
               null,
@@ -89,7 +94,11 @@ var Home = function (_Component) {
             }),
             _react2.default.createElement(
               "button",
-              { type: "submit", className: "home--button" },
+              {
+                type: "submit",
+                className: "home--button",
+                onClick: this.props.checkProfits
+              },
               "Check Profits"
             )
           )
@@ -167,17 +176,28 @@ var Results = function (_Component) {
             _react2.default.createElement(
               "h3",
               null,
-              "Your $1,200 dollar investment is now "
+              "Your $",
+              this.props.totalStatus.NEW_COST_PRICE,
+              " dollar investment is now",
+              " "
             ),
             _react2.default.createElement(
               "h1",
               null,
-              "$7,100"
+              this.props.totalStatus.NEW_SELLING_PRICE
             ),
-            _react2.default.createElement(
+            this.props.status === "gain" ? _react2.default.createElement(
               "h4",
               null,
-              "You made 400% profit"
+              "You made ",
+              this.props.totalStatus.GAIN_PERCENT,
+              "% profit"
+            ) : _react2.default.createElement(
+              "h4",
+              null,
+              "You made ",
+              this.props.totalStatus.LOSS_PERCENT,
+              "% loss"
             ),
             _react2.default.createElement(
               "a",
@@ -253,18 +273,31 @@ var Layout = function (_Component) {
     _this.state = {
       location: "home",
       date: (0, _moment2.default)(),
-      data: null
+      data: null,
+      todayPrice: null,
+      cryptoAmount: 1,
+      status: null,
+      totalStatus: null
     };
     _this.routingSystem = _this.routingSystem.bind(_this);
     _this.handleDateChange = _this.handleDateChange.bind(_this);
-    _this.apiCall = _this.apiCall.bind(_this);
+    _this.checkProfits = _this.checkProfits.bind(_this);
+    _this.onChangeInput = _this.onChangeInput.bind(_this);
     return _this;
   }
 
   _createClass(Layout, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.apiCall();
+      var _this2 = this;
+
+      _axios2.default.get("https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD&ts=" + (0, _moment2.default)().unix()).then(function (response) {
+        return _this2.setState({
+          todayPrice: response.data.BTC
+        });
+      }).catch(function (error) {
+        return console.log(error);
+      });
     }
   }, {
     key: "routingSystem",
@@ -273,11 +306,13 @@ var Layout = function (_Component) {
         case "home":
           return _react2.default.createElement(_Home2.default, {
             handleDateChange: this.handleDateChange,
-            globalState: this.state
+            globalState: this.state,
+            onChangeInput: this.onChangeInput,
+            checkProfits: this.checkProfits
           });
           break;
-        case "Results":
-          return _react2.default.createElement(_Results2.default, null);
+        case "results":
+          return _react2.default.createElement(_Results2.default, { totalStatus: this.state.totalStatus, status: this.status });
           break;
         default:
           return _react2.default.createElement(_Home2.default, null);
@@ -286,22 +321,70 @@ var Layout = function (_Component) {
   }, {
     key: "handleDateChange",
     value: function handleDateChange(date) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.setState({
         date: date
       }, function () {
-        return console.log(_this2.state.data.unix());
+        return console.log(_this3.state.date);
       });
     }
   }, {
-    key: "apiCall",
-    value: function apiCall() {
-      var _this3 = this;
+    key: "onChangeInput",
+    value: function onChangeInput(event) {
+      this.setState({
+        cryptoAmount: event.target.value
+      });
+    }
+  }, {
+    key: "checkProfits",
+    value: function checkProfits() {
+      var _this4 = this;
 
-      _axios2.default.get("https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD&ts=1452680400").then(function (response) {
-        return _this3.setState({
+      _axios2.default.get("https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD&ts=" + this.state.date.unix()).then(function (response) {
+        return _this4.setState({
           data: response.data
+        }, function () {
+          var COST_PRICE = _this4.state.data.BTC.USD; // Cost of Bitcoin price on purchased date
+          var SELLING_PRICE = _this4.state.todayPrice.USD; // Selling price as of today
+          var NEW_COST_PRICE = _this4.state.cryptoAmount * 100;
+          NEW_COST_PRICE = NEW_COST_PRICE * COST_PRICE / 100; // Total cost of user's input bitcoin amount on purchased date
+          console.log(NEW_COST_PRICE);
+          var NEW_SELLING_PRICE = _this4.state.cryptoAmount * 100;
+          NEW_SELLING_PRICE = NEW_SELLING_PRICE * SELLING_PRICE / 100;
+          console.log(NEW_SELLING_PRICE);
+          if (NEW_COST_PRICE < NEW_SELLING_PRICE) {
+            var gain = NEW_SELLING_PRICE - NEW_COST_PRICE;
+            var gainPercent = (gain / NEW_COST_PRICE * 100).toFixed(2);
+            console.log(_this4.state.cryptoAmount + " bitcoin newSP: " + NEW_SELLING_PRICE + ", SP: " + SELLING_PRICE + ", newCP: " + NEW_COST_PRICE + ", CP: " + COST_PRICE);
+            console.log("Profit: ", gainPercent);
+            _this4.setState({
+              location: "results",
+              status: "gain",
+              totalStatus: {
+                NEW_COST_PRICE: NEW_COST_PRICE,
+                COST_PRICE: COST_PRICE,
+                NEW_SELLING_PRICE: NEW_SELLING_PRICE,
+                SELLING_PRICE: SELLING_PRICE,
+                GAIN_PERCENT: gainPercent
+              }
+            });
+          } else {
+            var loss = NEW_COST_PRICE - NEW_SELLING_PRICE;
+            var lossPercent = (loss / NEW_COST_PRICE * 100).toFixed(2);
+            console.log("Lost: ", lossPercent);
+            _this4.setState({
+              location: "results",
+              status: "loss",
+              totalStatus: {
+                NEW_COST_PRICE: NEW_COST_PRICE,
+                COST_PRICE: COST_PRICE,
+                NEW_SELLING_PRICE: NEW_SELLING_PRICE,
+                SELLING_PRICE: SELLING_PRICE,
+                LOSS_PERCENT: lossPercent
+              }
+            });
+          }
         });
       }).catch(function (error) {
         return console.log(error);
